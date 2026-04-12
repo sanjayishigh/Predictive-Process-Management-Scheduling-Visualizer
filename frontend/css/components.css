@@ -1,0 +1,299 @@
+/* Glass Panels */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.feature-card {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.highlight-panel {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+    border-color: rgba(236, 72, 153, 0.3);
+}
+
+.highlight-panel:hover {
+    border-color: rgba(236, 72, 153, 0.6);
+}
+
+.feature-card .icon {
+    font-size: 2.5rem;
+}
+
+.feature-card h3 {
+    font-size: 1.25rem;
+}
+
+.feature-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.95rem;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.primary-btn:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    background: transparent;
+    color: white;
+    border: 1px solid var(--glass-border);
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Inputs & Forms */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 0.6rem 0.8rem;
+    color: white;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: var(--accent-primary);
+}
+
+input::placeholder {
+    color: #475569;
+}
+
+/* Table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.data-table th, .data-table td {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.data-table th {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.data-table td {
+    font-size: 0.95rem;
+}
+
+.data-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Gantt Chart Variables & Container */
+.gantt-wrapper {
+    margin-top: 1.5rem;
+    position: relative;
+}
+
+.gantt-chart-container {
+    display: flex;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--glass-border);
+}
+
+/* Gantt Chart Timelines */
+.gantt-timeline-labels {
+    position: relative;
+    height: 20px;
+    margin-top: 5px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+.gantt-time-tick {
+    position: absolute;
+    transform: translateX(-50%);
+}
+
+/* Individual Gantt Block */
+.gantt-block {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-right: 1px solid rgba(0, 0, 0, 0.3);
+    position: relative;
+    cursor: default;
+    transition: filter 0.2s, opacity 0.5s ease-out, flex-grow 0.5s ease-out;
+    opacity: 0;
+    animation: slideInBlock 0.5s forwards;
+    box-shadow: inset 0 0 10px rgba(255,255,255,0.1);
+}
+
+/* Tooltip for Gantt Block */
+.gantt-block .tooltip {
+    visibility: hidden;
+    background: #1e293b;
+    color: #f8fafc;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 12px;
+    position: absolute;
+    z-index: 10;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    font-size: 0.8rem;
+    font-weight: normal;
+    white-space: nowrap;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    pointer-events: none;
+}
+.gantt-block .tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #1e293b transparent transparent transparent;
+}
+.gantt-block:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+.gantt-block:hover {
+    filter: brightness(1.2);
+}
+
+@keyframes slideInBlock {
+    from {
+        opacity: 0;
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+/* Colors for PIDs - 10 custom colors */
+.color-p1 { background: var(--color-p1); }
+.color-p2 { background: var(--color-p2); }
+.color-p3 { background: var(--color-p3); }
+.color-p4 { background: var(--color-p4); }
+.color-p5 { background: var(--color-p5); }
+.color-p6 { background: var(--color-p6); }
+.color-p7 { background: var(--color-p7); }
+.color-p8 { background: var(--color-p8); }
+
+/* Compare Bars */
+.metric-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.bar-label {
+    width: 100px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+.bar-track {
+    flex: 1;
+    height: 20px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    overflow: hidden;
+}
+.bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: var(--accent-primary);
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+}
+.bar-value {
+    min-width: 40px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}

@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Deep dark violet/blue background */
+    --bg-color: #0d0e15;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    
+    /* Gradients and accents */
+    --accent-primary: #8b5cf6;
+    --accent-secondary: #ec4899;
+    --accent-cyan: #06b6d4;
+    
+    /* Glassmorphism variables */
+    --glass-bg: rgba(30, 41, 59, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    
+    /* Chart Colors */
+    --color-p1: #f43f5e;
+    --color-p2: #8b5cf6;
+    --color-p3: #0ea5e9;
+    --color-p4: #10b981;
+    --color-p5: #f59e0b;
+    --color-p6: #d946ef;
+    --color-p7: #64748b;
+    --color-p8: #ef4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    min-height: 100vh;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.15), transparent 25%);
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h3, h4 {
+    color: #fff;
+    font-weight: 600;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}

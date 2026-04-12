@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Scheduler | OS-EL</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/components.css">
+</head>
+<body>
+    <nav class="glass-nav">
+        <div class="logo">OS-EL<span class="highlight"></span></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="ai_scheduler.html" class="active">AI Scheduler</a>
+            <a href="fcfs.html">FCFS</a>
+            <a href="sjf.html">SJF</a>
+            <a href="roundrobin.html">Round Robin</a>
+            <a href="compare.html" class="highlight-link">Compare &rarr;</a>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <!-- Sidebar for Inputs -->
+        <aside class="sidebar glass-panel">
+            <h3>Add Process</h3>
+            <div class="input-group">
+                <label>Arrival Time</label>
+                <input type="number" id="arrival" placeholder="e.g. 0">
+            </div>
+            <div class="input-group">
+                <label>Burst Time</label>
+                <input type="number" id="burst" placeholder="e.g. 5">
+            </div>
+            <button class="btn secondary-btn" style="width: 100%; margin-top: 10px;" onclick="handleAddProcess()">+ Add Process</button>
+            <hr style="border:0; border-top: 1px solid var(--glass-border); margin: 15px 0;">
+            <button class="btn primary-btn" style="width: 100%;" onclick="runScheduler()">Run AI Scheduler</button>
+        </aside>
+
+        <!-- Main Content for Visuals -->
+        <main class="main-content">
+            <div class="glass-panel" style="min-height: 200px;">
+                <h2>God-Tier Gantt Chart</h2>
+                <div id="gantt-chart"></div>
+            </div>
+            
+            <div class="glass-panel" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);">
+                <h2>Performance Metrics</h2>
+                <div id="metrics-container"></div>
+            </div>
+
+            <div class="glass-panel">
+                <h2>Current Processes</h2>
+                <div id="process-table-container"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/processStore.js"></script>
+    <script src="./js/ganttChart.js"></script>
+    <script src="./js/ai_scheduler.js"></script>
+</body>
+</html>

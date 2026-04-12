@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS-EL: Scheduling Visualizer</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/components.css">
+</head>
+<body class="landing-body">
+    <nav class="glass-nav">
+        <div class="logo">OS-EL<span class="highlight"></span></div>
+        <div class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="ai_scheduler.html">AI Scheduler</a>
+            <a href="fcfs.html">FCFS</a>
+            <a href="sjf.html">SJF</a>
+            <a href="roundrobin.html">Round Robin</a>
+            <a href="compare.html" class="highlight-link">Compare &rarr;</a>
+        </div>
+    </nav>
+
+    <main class="landing-container">
+        <div class="hero">
+            <h1>Predictive Process Management</h1>
+            <p>Experience "God-Tier" visualizations of traditional OS scheduling algorithms versus our custom-trained ML model.</p>
+            <div class="cta-buttons">
+                <a href="ai_scheduler.html" class="btn primary-btn">Launch AI Model</a>
+                <a href="compare.html" class="btn secondary-btn">View Benchmark</a>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card glass-panel" onclick="window.location='fcfs.html'">
+                <div class="icon">➡️</div>
+                <h3>First Come First Serve</h3>
+                <p>The simplest scheduling algorithm. Processes are dispatched according to their arrival time.</p>
+            </div>
+            
+            <div class="feature-card glass-panel" onclick="window.location='sjf.html'">
+                <div class="icon">⏱️</div>
+                <h3>Shortest Job First</h3>
+                <p>Prioritizes processes with the smallest execution time to minimize waiting time.</p>
+            </div>
+
+            <div class="feature-card glass-panel" onclick="window.location='roundrobin.html'">
+                <div class="icon">🎡</div>
+                <h3>Round Robin</h3>
+                <p>Equitable time-sharing using a defined time quantum, perfect for interactive systems.</p>
+            </div>
+
+            <div class="feature-card glass-panel highlight-panel" onclick="window.location='compare.html'">
+                <div class="icon">🤖</div>
+                <h3>The Benchmark</h3>
+                <p>Compare our ML-based priority scheduler against traditional algorithms side-by-side.</p>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
