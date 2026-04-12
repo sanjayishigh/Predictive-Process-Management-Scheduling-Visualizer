@@ -1,12 +1,12 @@
-# OS-EL: Predictive Process Management & Scheduling Visualizer
+# Predictive-Scheduler: Predictive Process Management & Scheduling Visualizer
 
-Welcome to **OS-EL**, a next-generation, visually "God-Tier" Operating System Scheduling Simulator and benchmark tool. This project not only visualize classical OS scheduling algorithms with stunning interactive UIs but also introduces a custom-trained **Machine Learning Priority Scheduler** that continuously predicts and dynamically adjusts process priorities to outperform traditional approaches.
+Welcome to **Predictive-Scheduler**, a next-generation, visually "God-Tier" Operating System Scheduling Simulator and benchmark tool. This project not only visualize classical OS scheduling algorithms with stunning interactive UIs but also introduces a custom-trained **Machine Learning Priority Scheduler** that continuously predicts and dynamically adjusts process priorities to outperform traditional approaches.
 
 ---
 
 ## 🌟 Project Overview
 
-Traditional OS scheduling algorithms rely on static metrics (arrival time, burst time) or simple dynamic tweaks. **OS-EL** pushes the boundaries by integrating a pre-trained Deep Neural Network (DNN) that predicts process priorities in real-time. 
+Traditional OS scheduling algorithms rely on static metrics (arrival time, burst time) or simple dynamic tweaks. **Predictive-Scheduler** pushes the boundaries by integrating a pre-trained Deep Neural Network (DNN) that predicts process priorities in real-time. 
 
 Alongside the AI scheduler, this project serves as a highly educational playground to visualize:
 - **First Come First Serve (FCFS)**
@@ -52,14 +52,14 @@ Found in `backend/schedulers/ai_scheduler.py`, the AI scheduling algorithm re-ev
 1. **Continuous Prediction:** Every time a new process arrives, or the CPU becomes free, the backend feeds the current state (arrival time, remaining burst time, accumulated waiting time, etc.) into the `predict_priority` ML model.
 2. **Prioritization Layering:** The pool of ready processes is sorted by the predicted highest priority first, then falling back to shortest remaining time, and finally by longest waiting time to prevent starvation.
 3. **Predictive Proactive Resource Allocation (Confidence Scaling):**
-   The ML model returns a *Confidence Score*. OS-EL simulates pre-fetching and proactive resource allocation by using a mathematical tweak: `waiting_time` is proactively reduced proportionally to the model's confidence (`confidence * 2.5`). This allows the AI model to actually mathematically break the limits of standard SRTF and win head-to-head benchmarks.
+   The ML model returns a *Confidence Score*. Predictive-Scheduler simulates pre-fetching and proactive resource allocation by using a mathematical tweak: `waiting_time` is proactively reduced proportionally to the model's confidence (`confidence * 2.5`). This allows the AI model to actually mathematically break the limits of standard SRTF and win head-to-head benchmarks.
 
 ---
 
 ## 📂 Complete Folder Structure
 
 ```text
-os-el/
+Predictive-Scheduler/
 │
 ├── backend/                  # The Python Simulation Engine
 │   ├── app.py                # Main Flask Router & API server
@@ -106,7 +106,7 @@ This project requires **Python 3.8+**.
 ### 1. Clone & Access the Directory
 ```bash
 git clone <your-repo-link>
-cd os-el
+cd Predictive-Scheduler
 ```
 
 ### 2. Set Up the Python Environment
