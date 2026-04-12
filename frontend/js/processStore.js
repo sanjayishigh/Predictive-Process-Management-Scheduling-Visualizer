@@ -1,4 +1,4 @@
-// Default list of processes to show God-Tier visualizations and AI domination
+// Default workload for demos and comparison
 let processes = [
     { pid: "P1", burst_time: 10, arrival_time: 0, waiting_time: 2, task_type: 1 },
     { pid: "P2", burst_time: 2, arrival_time: 1, waiting_time: 4, task_type: 0 },

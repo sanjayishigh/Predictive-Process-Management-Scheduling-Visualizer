@@ -16,11 +16,11 @@ async function runScheduler() {
     const processes = getProcesses();
     const quantum = document.getElementById('quantum').value || 2;
     const btn = document.querySelector('.primary-btn');
-    btn.innerHTML = 'Running...';
+    btn.innerHTML = 'Running…';
     btn.disabled = true;
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/round_robin', {
+        const response = await fetch('/api/round_robin', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ processes, quantum: parseInt(quantum) })
@@ -28,13 +28,12 @@ async function runScheduler() {
 
         const data = await response.json();
 
-        // Render God-Tier Visuals
         renderGanttChart('gantt-chart', data.gantt);
         renderMetricsList('metrics-container', data.metrics);
 
     } catch (error) {
         console.error("Backend error:", error);
-        alert('Failed to connect to backend. Is the server running?');
+        alert('Could not reach the API. Start the server with python backend/app.py');
     } finally {
         btn.innerHTML = 'Run Round Robin';
         btn.disabled = false;

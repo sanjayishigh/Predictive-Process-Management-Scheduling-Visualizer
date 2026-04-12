@@ -1,78 +1,71 @@
 async function runAll() {
     const processes = getProcesses();
     const container = document.getElementById('compare-container');
-    
-    // Show loading
-    container.innerHTML = '<div style="text-align:center; padding: 2rem;">Simulating God-Tier visualizations...</div>';
+
+    container.innerHTML = '<div class="compare-placeholder">Running simulations…</div>';
 
     const reqs = [
-        { name: 'AI Scheduler', url: 'http://127.0.0.1:5000/ai_scheduler', id: 'ai' },
-        { name: 'FCFS', url: 'http://127.0.0.1:5000/fcfs', id: 'fcfs' },
-        { name: 'SJF', url: 'http://127.0.0.1:5000/sjf', id: 'sjf' },
-        { name: 'Round Robin (Q=2)', url: 'http://127.0.0.1:5000/round_robin', id: 'rr', body: { processes, quantum: 2 } }
+        { name: 'AI scheduler', url: '/api/ai_scheduler', id: 'ai' },
+        { name: 'FCFS', url: '/api/fcfs', id: 'fcfs' },
+        { name: 'SJF', url: '/api/sjf', id: 'sjf' },
+        { name: 'Round Robin (Q = 2)', url: '/api/round_robin', id: 'rr', body: { processes, quantum: 2 } }
     ];
 
     try {
-        const results = [];
-        
-        // Fetch all in parallel
-        for (const req of reqs) {
+        const results = await Promise.all(reqs.map(async (req) => {
             const body = req.body || { processes };
             const res = await fetch(req.url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
             });
+            if (!res.ok) {
+                throw new Error(`${req.name}: ${res.status}`);
+            }
             const data = await res.json();
-            results.push({ ...req, data });
-        }
-        
-        // Find best wait time
+            return { ...req, data };
+        }));
+
         let bestId = null;
         let minWait = Infinity;
-        results.forEach(res => {
-            if (res.data.metrics.avg_waiting_time < minWait) {
-                minWait = res.data.metrics.avg_waiting_time;
+        results.forEach((res) => {
+            const w = res.data.metrics.avg_waiting_time;
+            if (w < minWait) {
+                minWait = w;
                 bestId = res.id;
             }
         });
-        
-        // Force AI Scheduler to be winner visually if it's a tie or to highlight it.
-        // Actually since we want to "show that our ml model works the best", we highlight AI strongly.
-        bestId = 'ai';
 
         container.innerHTML = '';
-        
-        results.forEach(res => {
+
+        results.forEach((res) => {
             const isWinner = res.id === bestId;
-            const uiHtml = `
+            const badge = isWinner
+                ? '<span class="winner-badge">Lowest avg. wait</span>'
+                : '';
+            container.innerHTML += `
                 <div class="algo-section ${isWinner ? 'winner-section' : ''}">
+                    ${badge}
                     <div class="algo-header">
-                        <h3 style="color:${isWinner ? 'var(--accent-primary)' : 'white'}">${res.name}</h3>
+                        <h3>${res.name}</h3>
                         <div class="algo-stats">
-                            <span>Wait: <strong>${res.data.metrics.avg_waiting_time} ms</strong></span>
-                            <span>Turnaround: <strong>${res.data.metrics.avg_turnaround_time} ms</strong></span>
-                            <span>Response: <strong>${res.data.metrics.avg_response_time} ms</strong></span>
+                            <span>Wait: <strong>${res.data.metrics.avg_waiting_time}</strong></span>
+                            <span>Turnaround: <strong>${res.data.metrics.avg_turnaround_time}</strong></span>
+                            <span>Response: <strong>${res.data.metrics.avg_response_time}</strong></span>
                         </div>
                     </div>
                     <div id="gantt-${res.id}"></div>
                 </div>
             `;
-            container.innerHTML += uiHtml;
         });
 
-        // Initialize charts
-        setTimeout(() => {
-            results.forEach(res => {
+        requestAnimationFrame(() => {
+            results.forEach((res) => {
                 renderGanttChart(`gantt-${res.id}`, res.data.gantt);
             });
-        }, 100);
-
+        });
     } catch (error) {
         console.error(error);
-        container.innerHTML = '<div style="color:red; text-align:center;">Simulation failed. Ensure backend runs.</div>';
+        container.innerHTML = '<p class="compare-placeholder" style="color:#f87171">Request failed. Start the app with <code>python backend/app.py</code> and try again.</p>';
     }
 }
-
-// Optionally auto run
-setTimeout(runAll, 300);

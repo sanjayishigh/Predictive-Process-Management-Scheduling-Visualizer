@@ -1,5 +1,5 @@
 /**
- * God-Tier Gantt Chart Renderer
+ * Gantt chart and metrics rendering
  */
 
 const colors = [
@@ -64,12 +64,11 @@ function renderGanttChart(containerId, ganttData) {
             blockDiv.textContent = block.pid;
         }
         
-        // Add absolute end time label on the right side of the block
         const endLabel = document.createElement('span');
         if (block.remaining !== undefined) {
-             endLabel.innerHTML = `${block.end} <span style="font-size:0.5rem; opacity:0.6;">(R:${block.remaining})</span>`;
+            endLabel.innerHTML = `${block.end} <span style="font-size:0.5rem; opacity:0.6;">(R:${block.remaining})</span>`;
         } else {
-             endLabel.textContent = block.end;
+            endLabel.textContent = block.end;
         }
         endLabel.style.position = 'absolute';
         endLabel.style.right = '4px';
@@ -77,8 +76,7 @@ function renderGanttChart(containerId, ganttData) {
         endLabel.style.fontSize = '0.7rem';
         endLabel.style.opacity = '0.75';
         endLabel.style.pointerEvents = 'none';
-        
-        // Only show end label if block is wide enough
+
         if (widthPercent > 2) {
             blockDiv.appendChild(endLabel);
         }
@@ -118,18 +116,18 @@ function renderMetricsList(containerId, metricsData) {
     if (!container) return;
     
     container.innerHTML = `
-        <div style="display:flex; gap: 2rem; margin-bottom: 1rem;">
-            <div class="glass-panel" style="flex:1; text-align:center;">
-                <div style="font-size:0.85rem; color:var(--text-secondary)">Avg Waiting Time</div>
-                <div style="font-size:1.5rem; font-weight:bold; color:var(--accent-cyan)">${metricsData.avg_waiting_time} ms</div>
+        <div style="display:flex; flex-wrap:wrap; gap: 1rem; margin-bottom: 1rem;">
+            <div class="glass-panel" style="flex:1; min-width:140px; text-align:center;">
+                <div style="font-size:0.8rem; color:var(--text-secondary)">Avg waiting</div>
+                <div style="font-size:1.35rem; font-weight:700; color:var(--accent); font-family:var(--font-mono)">${metricsData.avg_waiting_time} ms</div>
             </div>
-            <div class="glass-panel" style="flex:1; text-align:center;">
-                <div style="font-size:0.85rem; color:var(--text-secondary)">Avg Turnaround Time</div>
-                <div style="font-size:1.5rem; font-weight:bold; color:var(--accent-primary)">${metricsData.avg_turnaround_time} ms</div>
+            <div class="glass-panel" style="flex:1; min-width:140px; text-align:center;">
+                <div style="font-size:0.8rem; color:var(--text-secondary)">Avg turnaround</div>
+                <div style="font-size:1.35rem; font-weight:700; color:var(--chart-p4); font-family:var(--font-mono)">${metricsData.avg_turnaround_time} ms</div>
             </div>
-            <div class="glass-panel" style="flex:1; text-align:center;">
-                <div style="font-size:0.85rem; color:var(--text-secondary)">Avg Response Time</div>
-                <div style="font-size:1.5rem; font-weight:bold; color:#f472b6">${metricsData.avg_response_time} ms</div>
+            <div class="glass-panel" style="flex:1; min-width:140px; text-align:center;">
+                <div style="font-size:0.8rem; color:var(--text-secondary)">Avg response</div>
+                <div style="font-size:1.35rem; font-weight:700; color:var(--chart-p5); font-family:var(--font-mono)">${metricsData.avg_response_time} ms</div>
             </div>
         </div>
     `;
@@ -175,16 +173,16 @@ function renderMetricsList(containerId, metricsData) {
         let totalTurn = turnValues.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
         
         let mathStepsHtml = `
-            <div class="glass-panel" style="margin-top: 25px; margin-bottom: 5px; padding: 20px; border-left: 4px solid var(--accent-cyan); background: rgba(0,0,0,0.25);">
-                <h4 style="margin-top:0; margin-bottom:15px; color:var(--text-primary); font-size: 0.95rem;">Average Calculation Steps</h4>
-                <div style="font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8; display: flex; flex-direction: column; gap: 15px;">
+            <div class="glass-panel" style="margin-top: 25px; margin-bottom: 5px; padding: 20px; border-left: 4px solid var(--accent); background: rgba(0,0,0,0.2);">
+                <h4 style="margin-top:0; margin-bottom:15px; color:var(--text-primary); font-size: 0.95rem;">Average calculation</h4>
+                <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-secondary); line-height: 1.8; display: flex; flex-direction: column; gap: 15px;">
                     <div>
-                        <span style="display:inline-block; min-width: 280px; color: white;">Waiting Time (WT = TAT - BT)</span> = ${waitValues.join(' + ')} = ${totalWait.toFixed ? totalWait.toFixed(2) : totalWait} ms<br>
-                        <span style="display:inline-block; min-width: 280px; color: white;">Avg Waiting Time</span> = ${totalWait.toFixed ? totalWait.toFixed(2) : totalWait} / ${metricsData.details.length} = <span style="color:var(--accent-cyan); font-weight:bold;">${metricsData.avg_waiting_time} ms</span>
+                        <span style="display:inline-block; min-width: 260px; color: var(--text-primary);">Waiting (WT = TAT − BT)</span> = ${waitValues.join(' + ')} = ${totalWait.toFixed ? totalWait.toFixed(2) : totalWait} ms<br>
+                        <span style="display:inline-block; min-width: 260px; color: var(--text-primary);">Avg waiting</span> = ${totalWait.toFixed ? totalWait.toFixed(2) : totalWait} / ${metricsData.details.length} = <span style="color:var(--accent); font-weight:bold;">${metricsData.avg_waiting_time} ms</span>
                     </div>
                     <div>
-                        <span style="display:inline-block; min-width: 280px; color: white;">Turnaround Time (TAT = CT - AT)</span> = ${turnValues.join(' + ')} = ${totalTurn.toFixed ? totalTurn.toFixed(2) : totalTurn} ms<br>
-                        <span style="display:inline-block; min-width: 280px; color: white;">Avg Turnaround Time</span> = ${totalTurn.toFixed ? totalTurn.toFixed(2) : totalTurn} / ${metricsData.details.length} = <span style="color:var(--accent-primary); font-weight:bold;">${metricsData.avg_turnaround_time} ms</span>
+                        <span style="display:inline-block; min-width: 260px; color: var(--text-primary);">Turnaround (TAT = CT − AT)</span> = ${turnValues.join(' + ')} = ${totalTurn.toFixed ? totalTurn.toFixed(2) : totalTurn} ms<br>
+                        <span style="display:inline-block; min-width: 260px; color: var(--text-primary);">Avg turnaround</span> = ${totalTurn.toFixed ? totalTurn.toFixed(2) : totalTurn} / ${metricsData.details.length} = <span style="color:var(--chart-p4); font-weight:bold;">${metricsData.avg_turnaround_time} ms</span>
                     </div>
                 </div>
             </div>

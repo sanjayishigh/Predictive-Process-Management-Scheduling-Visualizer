@@ -1,53 +1,57 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-    /* Deep dark violet/blue background */
-    --bg-color: #0d0e15;
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
-    
-    /* Gradients and accents */
-    --accent-primary: #8b5cf6;
-    --accent-secondary: #ec4899;
-    --accent-cyan: #06b6d4;
-    
-    /* Glassmorphism variables */
-    --glass-bg: rgba(30, 41, 59, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    
-    /* Chart Colors */
-    --color-p1: #f43f5e;
-    --color-p2: #8b5cf6;
-    --color-p3: #0ea5e9;
-    --color-p4: #10b981;
-    --color-p5: #f59e0b;
-    --color-p6: #d946ef;
-    --color-p7: #64748b;
-    --color-p8: #ef4444;
+    --bg: #090a0c;
+    --surface: #111318;
+    --surface-elevated: #171a21;
+    --border: rgba(255, 255, 255, 0.08);
+    --text-primary: #f1f3f5;
+    --text-secondary: #8b9199;
+    --accent: #3d9ee5;
+    --accent-hover: #5eb0f0;
+    --accent-muted: rgba(61, 158, 229, 0.14);
+    --chart-p1: #e85d75;
+    --chart-p2: #7c6cf0;
+    --chart-p3: #3d9ee5;
+    --chart-p4: #3ecf8e;
+    --chart-p5: #f0b429;
+    --chart-p6: #c084fc;
+    --chart-p7: #64748b;
+    --chart-p8: #f87171;
+    --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 12px 40px rgba(0, 0, 0, 0.35);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
 }
 
 body {
-    background-color: var(--bg-color);
+    font-family: var(--font-sans);
+    background-color: var(--bg);
     color: var(--text-primary);
     min-height: 100vh;
-    background-image: 
-        radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.15), transparent 25%);
+    line-height: 1.5;
+    background-image:
+        radial-gradient(ellipse 90% 60% at 50% -25%, rgba(61, 158, 229, 0.14), transparent 55%),
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
+    background-position: 0 0, 0 0, 0 0;
     background-attachment: fixed;
     display: flex;
     flex-direction: column;
 }
 
 h1, h2, h3, h4 {
-    color: #fff;
+    color: var(--text-primary);
     font-weight: 600;
+    letter-spacing: -0.02em;
 }
 
 a {

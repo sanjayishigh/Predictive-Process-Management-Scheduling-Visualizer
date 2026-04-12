@@ -6,8 +6,7 @@ function handleAddProcess() {
     const burst = document.getElementById('burst').value;
     addProcess(null, parseInt(burst) || 0, parseInt(arrival) || 0);
     renderProcessTable('process-table-container');
-    
-    // Clear inputs
+
     document.getElementById('arrival').value = '';
     document.getElementById('burst').value = '';
 }
@@ -15,11 +14,11 @@ function handleAddProcess() {
 async function runScheduler() {
     const processes = getProcesses();
     const btn = document.querySelector('.primary-btn');
-    btn.innerHTML = 'Running...';
+    btn.innerHTML = 'Running…';
     btn.disabled = true;
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/fcfs', {
+        const response = await fetch('/api/fcfs', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ processes })
@@ -27,18 +26,15 @@ async function runScheduler() {
 
         const data = await response.json();
 
-        // Render God-Tier Visuals
         renderGanttChart('gantt-chart', data.gantt);
         renderMetricsList('metrics-container', data.metrics);
-
     } catch (error) {
-        console.error("Backend error:", error);
-        alert('Failed to connect to backend. Is the server running?');
+        console.error('Backend error:', error);
+        alert('Could not reach the API. Start the server with python backend/app.py');
     } finally {
         btn.innerHTML = 'Run FCFS';
         btn.disabled = false;
     }
 }
 
-// Auto-run on load to show demo
-setTimeout(runScheduler, 500);
+setTimeout(runScheduler, 400);

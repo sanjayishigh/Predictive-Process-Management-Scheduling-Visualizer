@@ -3,60 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OS-EL: Scheduling Visualizer</title>
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/layout.css">
-    <link rel="stylesheet" href="./css/components.css">
+    <meta name="description" content="Interactive CPU scheduling visualizer: FCFS, SJF, Round Robin, and ML-assisted priority scheduling.">
+    <title>OS-EL — CPU scheduling visualizer</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/components.css">
 </head>
 <body class="landing-body">
-    <nav class="glass-nav">
-        <div class="logo">OS-EL<span class="highlight"></span></div>
+    <nav class="site-nav">
+        <a href="/" class="brand">OS-EL<span class="brand-sub"> Lab</span></a>
         <div class="nav-links">
-            <a href="index.html" class="active">Home</a>
-            <a href="ai_scheduler.html">AI Scheduler</a>
-            <a href="fcfs.html">FCFS</a>
-            <a href="sjf.html">SJF</a>
-            <a href="roundrobin.html">Round Robin</a>
-            <a href="compare.html" class="highlight-link">Compare &rarr;</a>
+            <a href="/" class="active">Home</a>
+            <a href="/ai_scheduler">AI Scheduler</a>
+            <a href="/fcfs">FCFS</a>
+            <a href="/sjf">SJF</a>
+            <a href="/roundrobin">Round Robin</a>
+            <a href="/compare" class="nav-cta">Compare</a>
         </div>
     </nav>
 
-    <main class="landing-container">
-        <div class="hero">
-            <h1>Predictive Process Management</h1>
-            <p>Experience "God-Tier" visualizations of traditional OS scheduling algorithms versus our custom-trained ML model.</p>
-            <div class="cta-buttons">
-                <a href="ai_scheduler.html" class="btn primary-btn">Launch AI Model</a>
-                <a href="compare.html" class="btn secondary-btn">View Benchmark</a>
+    <main class="landing-main">
+        <section class="landing-hero">
+            <div class="landing-hero-copy">
+                <h1>See how CPU schedulers behave before you ship them</h1>
+                <p class="lead">Run classical algorithms side by side with a learned priority policy. Inspect Gantt timelines and average wait time in one place—built for teaching, benchmarking, and quick what-if checks.</p>
+                <div class="cta-row">
+                    <a href="/ai_scheduler" class="btn primary-btn">Open AI scheduler</a>
+                    <a href="/compare" class="btn secondary-btn">Run comparison</a>
+                </div>
             </div>
-        </div>
+            <figure class="landing-hero-visual" aria-label="CPU Scheduler Data Flow">
+                <img
+                    src="/assets/hero.png"
+                    alt="Abstract neon-lit 3D representation of CPU processes scheduling"
+                    width="900"
+                    height="675"
+                    loading="eager"
+                >
+                <figcaption>Simulated execution queues</figcaption>
+            </figure>
+        </section>
 
-        <div class="features-grid">
-            <div class="feature-card glass-panel" onclick="window.location='fcfs.html'">
-                <div class="icon">➡️</div>
-                <h3>First Come First Serve</h3>
-                <p>The simplest scheduling algorithm. Processes are dispatched according to their arrival time.</p>
+        <section class="features-section" aria-labelledby="tools-heading">
+            <h2 id="tools-heading">Tools</h2>
+            <div class="features-grid">
+                <a href="/fcfs" class="feature-card">
+                    <div class="feature-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+                    </div>
+                    <h3>First come, first served</h3>
+                    <p>Non-preemptive queueing by arrival order. Baseline fairness with predictable behavior.</p>
+                </a>
+                <a href="/sjf" class="feature-card">
+                    <div class="feature-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg>
+                    </div>
+                    <h3>Shortest job first</h3>
+                    <p>Favors short bursts to reduce mean waiting time; good for batch-style workloads.</p>
+                </a>
+                <a href="/roundrobin" class="feature-card">
+                    <div class="feature-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 109 9"/><path d="M12 3v6l3 3"/></svg>
+                    </div>
+                    <h3>Round robin</h3>
+                    <p>Time-sliced execution with a configurable quantum—typical for interactive systems.</p>
+                </a>
+                <a href="/compare" class="feature-card feature-card-highlight">
+                    <div class="feature-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16v-5M12 16V8M16 16v-3"/></svg>
+                    </div>
+                    <h3>Algorithm comparison</h3>
+                    <p>Run all policies on the same process set and compare average wait time at a glance.</p>
+                </a>
             </div>
-            
-            <div class="feature-card glass-panel" onclick="window.location='sjf.html'">
-                <div class="icon">⏱️</div>
-                <h3>Shortest Job First</h3>
-                <p>Prioritizes processes with the smallest execution time to minimize waiting time.</p>
-            </div>
-
-            <div class="feature-card glass-panel" onclick="window.location='roundrobin.html'">
-                <div class="icon">🎡</div>
-                <h3>Round Robin</h3>
-                <p>Equitable time-sharing using a defined time quantum, perfect for interactive systems.</p>
-            </div>
-
-            <div class="feature-card glass-panel highlight-panel" onclick="window.location='compare.html'">
-                <div class="icon">🤖</div>
-                <h3>The Benchmark</h3>
-                <p>Compare our ML-based priority scheduler against traditional algorithms side-by-side.</p>
-            </div>
-        </div>
+        </section>
     </main>
 
+    <footer class="site-footer">
+        OS-EL — educational scheduling visualizations. Run locally with <code style="font-family:var(--font-mono);font-size:0.85em;">python backend/app.py</code>
+    </footer>
 </body>
 </html>

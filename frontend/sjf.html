@@ -3,63 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SJF Scheduler | OS</title>
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/layout.css">
-    <link rel="stylesheet" href="./css/components.css">
+    <meta name="description" content="Shortest Job First CPU scheduling visualization.">
+    <title>SJF — OS-EL</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/components.css">
 </head>
 <body>
-    <nav class="glass-nav">
-        <div class="logo">OS<span class="highlight">.ai</span></div>
+    <nav class="site-nav">
+        <a href="/" class="brand">OS-EL<span class="brand-sub"> Lab</span></a>
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="ai_scheduler.html">AI Scheduler</a>
-            <a href="fcfs.html">FCFS</a>
-            <a href="sjf.html" class="active">SJF</a>
-            <a href="roundrobin.html">Round Robin</a>
-            <a href="compare.html" class="highlight-link">Compare &rarr;</a>
+            <a href="/">Home</a>
+            <a href="/ai_scheduler">AI Scheduler</a>
+            <a href="/fcfs">FCFS</a>
+            <a href="/sjf" class="active">SJF</a>
+            <a href="/roundrobin">Round Robin</a>
+            <a href="/compare" class="nav-cta">Compare</a>
         </div>
     </nav>
 
     <div class="app-container">
-        <!-- Sidebar for Inputs -->
-        <aside class="sidebar glass-panel">
-            <h3>Add Process</h3>
+        <header class="page-intro">
+            <h1>Shortest job first</h1>
+            <p>Among arrived jobs, the smallest burst runs next. Minimizes average waiting time for this workload model.</p>
+        </header>
+
+        <aside class="sidebar surface-card">
+            <h3>Inputs</h3>
             <div class="input-group">
-                <label>Arrival Time</label>
-                <input type="number" id="arrival" placeholder="e.g. 0">
+                <label for="arrival">Arrival time</label>
+                <input type="number" id="arrival" placeholder="0" min="0">
             </div>
             <div class="input-group">
-                <label>Burst Time</label>
-                <input type="number" id="burst" placeholder="e.g. 5">
+                <label for="burst">Burst time</label>
+                <input type="number" id="burst" placeholder="5" min="1">
             </div>
-            <button class="btn secondary-btn" style="width: 100%; margin-top: 10px;" onclick="handleAddProcess()">+ Add Process</button>
-            <hr style="border:0; border-top: 1px solid var(--glass-border); margin: 15px 0;">
-            <button class="btn primary-btn" style="width: 100%;" onclick="runScheduler()">Run SJF</button>
+            <button type="button" class="btn secondary-btn" style="width:100%" onclick="handleAddProcess()">Add process</button>
+            <hr class="divider">
+            <button type="button" class="btn primary-btn" style="width:100%" onclick="runScheduler()">Run SJF</button>
         </aside>
 
-        <!-- Main Content for Visuals -->
         <main class="main-content">
-            <div class="glass-panel" style="min-height: 200px;">
-                <h2>God-Tier Gantt Chart (SJF)</h2>
+            <div class="surface-card gantt-panel">
+                <h2>Gantt chart</h2>
                 <div id="gantt-chart"></div>
             </div>
-            
-            <div class="glass-panel">
-                <h2>Performance Metrics</h2>
+            <div class="surface-card">
+                <h2>Performance metrics</h2>
                 <div id="metrics-container"></div>
             </div>
-
-            <div class="glass-panel">
-                <h2>Current Processes</h2>
+            <div class="surface-card">
+                <h2>Process list</h2>
                 <div id="process-table-container"></div>
             </div>
         </main>
     </div>
 
-    <!-- Scripts -->
-    <script src="./js/processStore.js"></script>
-    <script src="./js/ganttChart.js"></script>
-    <script src="./js/sjf.js"></script>
+    <script src="/js/processStore.js"></script>
+    <script src="/js/ganttChart.js"></script>
+    <script src="/js/sjf.js"></script>
 </body>
 </html>
