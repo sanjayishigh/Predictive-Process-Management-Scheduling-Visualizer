@@ -4,7 +4,7 @@ Welcome to **Predictive-Scheduler**, a next-generation, visually "God-Tier" Oper
 
 ---
 
-## 🌟 Project Overview
+## Project Overview
 
 Traditional OS scheduling algorithms rely on static metrics (arrival time, burst time) or simple dynamic tweaks. **Predictive-Scheduler** pushes the boundaries by integrating a pre-trained Deep Neural Network (DNN) that predicts process priorities in real-time. 
 
@@ -18,7 +18,7 @@ The UI is built with a premium glassmorphic design, dynamic CSS animations, and 
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 The project is structured into a modern client-server architecture with a clear separation of concerns:
 
@@ -45,7 +45,7 @@ Located in `/models/` and `/datasets/`.
 
 ---
 
-## 🧠 How The AI Scheduler Works (The Magic)
+## How The AI Scheduler Works (The Magic)
 
 Found in `backend/schedulers/ai_scheduler.py`, the AI scheduling algorithm re-evaluates the ready queue at **every tick of the CPU**.
 
@@ -56,7 +56,7 @@ Found in `backend/schedulers/ai_scheduler.py`, the AI scheduling algorithm re-ev
 
 ---
 
-## 📂 Complete Folder Structure
+## Complete Folder Structure
 
 ```text
 Predictive-Scheduler/
@@ -127,17 +127,6 @@ The application is now unified! The backend Flask API automatically serves the f
 python3 app.py
 ```
 Open your browser and navigate to `http://localhost:5000/`.
-
----
-
-## 🎨 Visual Features & Educational Highlights
-
-- **Thematic Consistency:** Built with glowing cyan and pink neon accents (`var(--accent-cyan)`, `var(--accent-primary)`) to give it a futuristic "AI vs Classic" hacking aesthetic.
-- **Interactive Process Input:** Add custom processes with your own burst times and arrival times, and immediately see the graph re-render.
-- **Formula Transparency:** Below every Gantt chart is a dynamic text block showing exactly how it arrived at its conclusions. E.g.
-  > `Turnaround Time (TAT = CT - AT) = 4 + 7 + 10 = 21 ms`  
-  > `Avg Turnaround Time = 21 / 3 = 7.00 ms`
-- **Responsive Architecture:** Flex/Grid layouts ensure the Gantt block percentages re-adjust gracefully on varying window sizes.
 
 ---
 
