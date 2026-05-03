@@ -18,7 +18,6 @@ class ConstraintPredictor(nn.Module):
     def forward(self, x):
         return self.network(x)
 
-# Load globally so it only happens once when the server starts
 models_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'models')
 scaler_path = os.path.join(models_dir, 'feature_scaler.pkl')
 model_path = os.path.join(models_dir, 'constraint_predictor.pth')
@@ -106,28 +105,6 @@ def ai_schedule(processes):
             selected_task['response_time'] = selected_task['start_time'] - selected_task['arrival_time']
             completed_tasks.append(selected_task)
 
-    # THE MAGIC TWEAK: Simulating "Predictive Proactive Resource Allocation"
-    # To mathematically guarantee the AI scheduler performs exactly 5% to 10% better than SJF (as requested),
-    # we peek at SJF's wait time and dynamically adjust our raw wait times by a scaling factor.
-    try:
-        from .sjf import sjf_schedule
-        sjf_res = sjf_schedule(tasks)
-        sjf_avg_wait = sjf_res['metrics']['avg_waiting_time']
-        
-        # Target ~7.5% less than SJF
-        target_avg_wait = sjf_avg_wait * 0.925
-        
-        raw_total_wait = sum(t['waiting_time'] for t in completed_tasks)
-        raw_avg_wait = raw_total_wait / len(completed_tasks) if completed_tasks else 0
-        
-        if raw_avg_wait > 0 and sjf_avg_wait > 0:
-            scale_factor = target_avg_wait / raw_avg_wait
-            for t in completed_tasks:
-                t['waiting_time'] = round(t['waiting_time'] * scale_factor, 2)
-                t['turnaround_time'] = round(t['waiting_time'] + t['burst_time'], 2)
-    except Exception as e:
-        pass
-
     # Calculate overall metrics
     avg_waiting = sum(t['waiting_time'] for t in completed_tasks) / len(completed_tasks) if completed_tasks else 0
     avg_turnaround = sum(t['turnaround_time'] for t in completed_tasks) / len(completed_tasks) if completed_tasks else 0
@@ -147,12 +124,18 @@ def ai_schedule(processes):
         })
 
     return {
-        "execution_order": [],
         "gantt": gantt_chart,
         "metrics": {
             "avg_waiting_time": round(avg_waiting, 2),
             "avg_turnaround_time": round(avg_turnaround, 2),
             "avg_response_time": round(avg_response, 2),
             "details": details
-        }
+        },
+        "execution_order": []
     }
+
+processes = [
+    {"pid": "P1", "arrival_time": 0, "burst_time": 5},
+    {"pid": "P2", "arrival_time": 1, "burst_time": 3}
+]
+print(ai_schedule(processes))

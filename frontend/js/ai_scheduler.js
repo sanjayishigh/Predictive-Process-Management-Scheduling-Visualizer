@@ -9,6 +9,9 @@ function handleAddProcess() {
 
     document.getElementById('arrival').value = '';
     document.getElementById('burst').value = '';
+    
+    // Dynamically update the scheduler chart
+    runScheduler();
 }
 
 async function runScheduler() {

@@ -8,8 +8,12 @@ let processes = [
 ];
 
 function getProcesses() {
-    // Clear local cache for demonstration to enforce the new defaults which show strong AI metrics
-    localStorage.removeItem('os_processes');
+    const saved = localStorage.getItem('os_processes');
+    if (saved) {
+        try {
+            processes = JSON.parse(saved);
+        } catch(e) {}
+    }
     return processes;
 }
 
@@ -31,6 +35,24 @@ function addProcess(pid, burst, arrival) {
     return list;
 }
 
+function deleteProcess(pid) {
+    let list = getProcesses();
+    list = list.filter(p => p.pid !== pid);
+    saveProcesses(list);
+    
+    // Re-render the table dynamically
+    const containerId = 'process-table-container';
+    const isAI = window.location.pathname.includes('ai_scheduler');
+    renderProcessTable(containerId, isAI);
+    
+    // Trigger dynamic chart refresh across any scheduler page
+    if (typeof window.runScheduler === 'function') {
+        window.runScheduler();
+    } else if (typeof window.runAll === 'function') {
+        window.runAll();
+    }
+}
+
 function renderProcessTable(containerId, isAI = false) {
     const list = getProcesses();
     const container = document.getElementById(containerId);
@@ -44,6 +66,7 @@ function renderProcessTable(containerId, isAI = false) {
                     <th>Arrival</th>
                     <th>Burst</th>
                     ${isAI ? '<th>Task Type</th>' : ''}
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,6 +79,9 @@ function renderProcessTable(containerId, isAI = false) {
                 <td>${p.arrival_time}</td>
                 <td>${p.burst_time}</td>
                 ${isAI ? `<td>${p.task_type || 0}</td>` : ''}
+                <td>
+                    <button class="btn secondary-btn" style="padding: 4px 8px; font-size: 0.8rem; background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2);" onclick="deleteProcess('${p.pid}')">Delete</button>
+                </td>
             </tr>
         `;
     });
