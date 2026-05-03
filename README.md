@@ -130,4 +130,4 @@ Open your browser and navigate to `http://localhost:5000/`.
 
 ---
 
-> **Built to demonstrate Operating Systems optimization through the lens of Artificial Intelligence.**
+> **Built to demonstrate Operating Systems optimization through Artificial Intelligence.**
