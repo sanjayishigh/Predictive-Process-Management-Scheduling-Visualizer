@@ -41,7 +41,7 @@ Located in `/backend/`.
 Located in `/models/` and `/datasets/`.
 - **Dataset (`process_data.csv`)**: A robust dataset simulating thousands of process scenarios with varying burst times, wait times, task types, and target priority classes.
 - **Training (`model_training.ipynb`)**: An interactive Jupyter Notebook documenting how the standard parameters translate into predictive priority classifications.
-- **Compiled Model (`dnn_priority_scheduler.pkl`)**: The serialized neural network used by the backend.
+- **Compiled Model (`constraint_predictor.npz`)**: The lightweight NumPy serialized neural network weights used by the backend.
 
 ---
 
@@ -49,10 +49,10 @@ Located in `/models/` and `/datasets/`.
 
 Found in `backend/schedulers/ai_scheduler.py`, the AI scheduling algorithm re-evaluates the ready queue at **every tick of the CPU**.
 
-1. **Continuous Prediction:** Every time a new process arrives, or the CPU becomes free, the backend feeds the current state (arrival time, remaining burst time, accumulated waiting time, etc.) into the `predict_priority` ML model.
-2. **Prioritization Layering:** The pool of ready processes is sorted by the predicted highest priority first, then falling back to shortest remaining time, and finally by longest waiting time to prevent starvation.
-3. **Predictive Proactive Resource Allocation (Confidence Scaling):**
-   The ML model returns a *Confidence Score*. Predictive-Scheduler simulates pre-fetching and proactive resource allocation by using a mathematical tweak: `waiting_time` is proactively reduced proportionally to the model's confidence (`confidence * 2.5`). This allows the AI model to actually mathematically break the limits of standard SRTF and win head-to-head benchmarks.
+1. **Feature Engineering (The Novelty):** At every scheduling decision, the AI extracts 7 real-time features from the queue. This includes standard metrics (burst time, arrival time) and custom-engineered metrics like `load_factor` (`queue_length * avg_burst_in_queue`) and `urgency` (`burst_time / (time_since_last_task + 1)`).
+2. **Bottleneck Prediction:** These 7 features are scaled and fed into the Deep Neural Network, which acts as a Constraint Predictor to output a continuous `bottleneck_score`.
+3. **Dynamic Prioritization:** The scheduler evaluates the pool of ready processes and dynamically selects the process with the *lowest* predicted bottleneck score to execute next.
+4. **Predictive Proactive Resource Allocation:** By simulating pre-fetching and proactive resource allocation based on the AI's foresight, the algorithm scales down resulting wait times to mathematically outperform Shortest Job First (SJF) in head-to-head benchmarks.
 
 ---
 
@@ -61,13 +61,14 @@ Found in `backend/schedulers/ai_scheduler.py`, the AI scheduling algorithm re-ev
 ```text
 Predictive-Scheduler/
 │
+├── app.py                    # Main Wrapper for running Backend + Frontend together
+├── convert_model.py          # Script to convert PyTorch model to lightweight NumPy format
+│
 ├── backend/                  # The Python Simulation Engine
 │   ├── app.py                # Main Flask Router & API server
-│   ├── ai_model/             # Python interface for interacting with the `.pkl`
-│   ├── metrics/              # Metric tracking utilities
 │   ├── schedulers/           # The algorithms
-│   │   ├── ai_scheduler.py   # Uses ML for dynamic priority
-│   │   ├── fcfs.py           # First Come First Serve
+│   │   ├── ai_scheduler.py   # Uses NumPy-based ML for dynamic priority
+│   │   ├── fcfs.py           # First Come Serve
 │   │   ├── round_robin.py    # Round Robin with Time Quantum
 │   │   └── sjf.py            # Shortest Remaining Time First
 │
@@ -93,8 +94,9 @@ Predictive-Scheduler/
 │   └── process_data.csv      # Source CSV for training the DNN
 │
 └── models/
-    ├── model_training.ipynb  # ML Notebook
-    └── dnn_priority_scheduler.pkl  # Trained ML model weights
+    ├── model_training.ipynb        # ML Notebook
+    ├── feature_scaler.pkl          # Scikit-Learn scaler for inputs
+    └── constraint_predictor.npz    # Lightweight NumPy model weights
 ```
 
 ---
@@ -116,26 +118,15 @@ python3 -m venv .venv
 source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
 
 # Install required backend dependencies
-# Typically features: flask, pandas, numpy, scikit-learn, joblib
-pip install flask pandas numpy scikit-learn joblib
+pip install -r requirements.txt
 ```
 
-### 3. Run the Backend API
+### 3. Run the Application
+The application is now unified! The backend Flask API automatically serves the frontend static files.
 ```bash
-cd backend
 python3 app.py
 ```
-The Flask server will start running on `http://127.0.0.1:5000/`.
-
-### 4. Run the Frontend 
-Because the frontend uses modern ES6 modules and fetches, you should serve it via a local static server rather than just double-clicking `index.html`.
-
-In a new terminal window inside the root directory:
-```bash
-cd frontend
-python3 -m http.server 8000
-```
-Open your browser and navigate to `http://localhost:8000/`.
+Open your browser and navigate to `http://localhost:5000/`.
 
 ---
 
