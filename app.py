@@ -1,4 +1,3 @@
-"""Vercel entrypoint: exposes the Flask application as `app` (see Vercel Flask docs)."""
 import importlib.util
 import sys
 from pathlib import Path

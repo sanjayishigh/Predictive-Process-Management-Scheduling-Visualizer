@@ -1,32 +1,34 @@
 import os
 import joblib
 import pandas as pd
-import torch
-import torch.nn as nn
-
-class ConstraintPredictor(nn.Module):
-    def __init__(self, input_dim):
-        super().__init__()
-        self.network = nn.Sequential(
-            nn.Linear(input_dim, 64),
-            nn.ReLU(),
-            nn.Dropout(0.2),
-            nn.Linear(64, 32),
-            nn.ReLU(),
-            nn.Linear(32, 1)
-        )
-    def forward(self, x):
-        return self.network(x)
+import numpy as np
 
 # Load globally so it only happens once when the server starts
 models_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'models')
 scaler_path = os.path.join(models_dir, 'feature_scaler.pkl')
-model_path = os.path.join(models_dir, 'constraint_predictor.pth')
+model_path = os.path.join(models_dir, 'constraint_predictor.npz')
 
 scaler = joblib.load(scaler_path)
-model = ConstraintPredictor(input_dim=7)
-model.load_state_dict(torch.load(model_path))
-model.eval()
+model_weights = np.load(model_path)
+
+def numpy_forward(x_np):
+    # Layer 1
+    w1 = model_weights['network.0.weight']
+    b1 = model_weights['network.0.bias']
+    x = np.dot(x_np, w1.T) + b1
+    x = np.maximum(0, x) # ReLU
+    
+    # Layer 2
+    w2 = model_weights['network.3.weight']
+    b2 = model_weights['network.3.bias']
+    x = np.dot(x, w2.T) + b2
+    x = np.maximum(0, x) # ReLU
+    
+    # Layer 3
+    w3 = model_weights['network.5.weight']
+    b3 = model_weights['network.5.bias']
+    x = np.dot(x, w3.T) + b3
+    return x
 
 def ai_schedule(processes):
     tasks = processes
@@ -69,8 +71,7 @@ def ai_schedule(processes):
             X_input = df[features].values
             
             X_scaled = scaler.transform(X_input)
-            with torch.no_grad():
-                predictions = model(torch.FloatTensor(X_scaled)).numpy().flatten()
+            predictions = numpy_forward(X_scaled).flatten()
             
             df['ai_score'] = predictions
             # Sort by lowest bottleneck score
