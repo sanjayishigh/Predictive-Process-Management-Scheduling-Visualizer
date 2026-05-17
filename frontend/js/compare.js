@@ -51,7 +51,6 @@ async function runAll() {
                         <div class="algo-stats">
                             <span>Wait: <strong>${res.data.metrics.avg_waiting_time}</strong></span>
                             <span>Turnaround: <strong>${res.data.metrics.avg_turnaround_time}</strong></span>
-                            <span>Response: <strong>${res.data.metrics.avg_response_time}</strong></span>
                         </div>
                     </div>
                     <div id="gantt-${res.id}"></div>

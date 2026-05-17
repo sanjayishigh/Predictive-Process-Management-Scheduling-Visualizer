@@ -213,6 +213,7 @@ def ai_schedule(processes: list) -> dict:
             "start":    tick_before,
             "end":      env.current_tick,
             "duration": chosen_proc["burst_time"],
+            "remaining": 0
         })
 
         if terminated:

@@ -55,6 +55,9 @@ function renderGanttChart(containerId, ganttData) {
         blockDiv.className = `gantt-block ${getProcessColorClass(block.pid)}`;
         
         const widthPercent = (block.duration / maxEnd) * 100;
+        const leftPercent = (block.start / maxEnd) * 100;
+        blockDiv.style.position = 'absolute';
+        blockDiv.style.left = leftPercent + '%';
         blockDiv.style.width = widthPercent + '%';
         // Add animation delay for stagger
         blockDiv.style.animationDelay = `${delayCounter * 0.1}s`;
