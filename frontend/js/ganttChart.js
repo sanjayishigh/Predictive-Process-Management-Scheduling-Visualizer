@@ -111,7 +111,8 @@ function renderGanttChart(containerId, ganttData) {
 }
 
 // Global metric rendering utility
-function renderMetricsList(containerId, metricsData) {
+// showPredictedBurst: optional boolean, set true on AI scheduler page
+function renderMetricsList(containerId, metricsData, showPredictedBurst) {
     const container = document.getElementById(containerId);
     if (!container) return;
     
@@ -125,32 +126,38 @@ function renderMetricsList(containerId, metricsData) {
                 <div style="font-size:0.8rem; color:var(--text-secondary)">Avg turnaround</div>
                 <div style="font-size:1.35rem; font-weight:700; color:var(--chart-p4); font-family:var(--font-mono)">${metricsData.avg_turnaround_time} ms</div>
             </div>
-            <div class="glass-panel" style="flex:1; min-width:140px; text-align:center;">
-                <div style="font-size:0.8rem; color:var(--text-secondary)">Avg response</div>
-                <div style="font-size:1.35rem; font-weight:700; color:var(--chart-p5); font-family:var(--font-mono)">${metricsData.avg_response_time} ms</div>
-            </div>
         </div>
     `;
 
     if (metricsData.details && metricsData.details.length > 0) {
+        const lstmHeader = showPredictedBurst
+            ? `<th style="color:var(--accent);" title="LSTM predicted remaining burst">Predicted Burst (ms) ⚡</th>`
+            : '';
+
         let tableHtml = `
             <div style="overflow-x:auto; margin-top: 20px;">
                 <table class="data-table">
                     <thead>
                         <tr>
                             <th>PID</th>
-                            <th>Arrival (AT)</th>
-                            <th>Burst (BT)</th>
-                            <th>Completion (CT)</th>
-                            <th>TAT (CT-AT)</th>
-                            <th>WT (TAT-BT)</th>
-                            <th>RT (1st_Start-AT)</th>
+                            <th>Arrival</th>
+                            <th>Burst</th>
+                            <th>Completion</th>
+                            <th>Turnaround</th>
+                            <th>Waiting</th>
+                            ${lstmHeader}
                         </tr>
                     </thead>
                     <tbody>
         `;
         
         metricsData.details.forEach(d => {
+            const predictedBurstCell = showPredictedBurst
+                ? `<td><span class="lstm-badge" title="LSTM-predicted burst time">⚡ ${
+                    d.predicted_burst !== undefined ? Number(d.predicted_burst).toFixed(2) : '—'
+                  }</span></td>`
+                : '';
+
             tableHtml += `
                 <tr>
                     <td><strong>${d.pid}</strong></td>
@@ -159,35 +166,13 @@ function renderMetricsList(containerId, metricsData) {
                     <td>${d.completion !== undefined ? d.completion : '-'}</td>
                     <td>${d.turnaround !== undefined ? d.turnaround : '-'}</td>
                     <td>${(typeof d.wait === 'number' && !Number.isInteger(d.wait)) ? d.wait.toFixed(2) : (d.wait !== undefined ? d.wait : '-')}</td>
-                    <td>${d.response !== undefined ? d.response : '-'}</td>
+                    ${predictedBurstCell}
                 </tr>
             `;
         });
         
         tableHtml += `</tbody></table></div>`;
         
-        // Add explicit mathematical steps for Average calculations
-        let waitValues = metricsData.details.map(d => (typeof d.wait === 'number' && !Number.isInteger(d.wait)) ? d.wait.toFixed(2) : (d.wait || 0));
-        let turnValues = metricsData.details.map(d => d.turnaround || 0);
-        let totalWait = waitValues.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
-        let totalTurn = turnValues.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
-        
-        let mathStepsHtml = `
-            <div class="glass-panel" style="margin-top: 25px; margin-bottom: 5px; padding: 20px; border-left: 4px solid var(--accent); background: rgba(0,0,0,0.2);">
-                <h4 style="margin-top:0; margin-bottom:15px; color:var(--text-primary); font-size: 0.95rem;">Average calculation</h4>
-                <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-secondary); line-height: 1.8; display: flex; flex-direction: column; gap: 15px;">
-                    <div>
-                        <span style="display:inline-block; min-width: 260px; color: var(--text-primary);">Waiting (WT = TAT − BT)</span> = ${waitValues.join(' + ')} = ${totalWait.toFixed ? totalWait.toFixed(2) : totalWait} ms<br>
-                        <span style="display:inline-block; min-width: 260px; color: var(--text-primary);">Avg waiting</span> = ${totalWait.toFixed ? totalWait.toFixed(2) : totalWait} / ${metricsData.details.length} = <span style="color:var(--accent); font-weight:bold;">${metricsData.avg_waiting_time} ms</span>
-                    </div>
-                    <div>
-                        <span style="display:inline-block; min-width: 260px; color: var(--text-primary);">Turnaround (TAT = CT − AT)</span> = ${turnValues.join(' + ')} = ${totalTurn.toFixed ? totalTurn.toFixed(2) : totalTurn} ms<br>
-                        <span style="display:inline-block; min-width: 260px; color: var(--text-primary);">Avg turnaround</span> = ${totalTurn.toFixed ? totalTurn.toFixed(2) : totalTurn} / ${metricsData.details.length} = <span style="color:var(--chart-p4); font-weight:bold;">${metricsData.avg_turnaround_time} ms</span>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        container.innerHTML += tableHtml + mathStepsHtml;
+        container.innerHTML += tableHtml;
     }
 }

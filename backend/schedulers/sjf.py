@@ -55,14 +55,12 @@ def sjf_schedule(processes):
             completion_time = current_time
             turnaround_time = completion_time - current['arrival_time']
             waiting_time = turnaround_time - current['burst_time']
-            response_time = current['first_start_time'] - current['arrival_time']
             
             completed_processes.append({
                 'pid': current['pid'],
                 'arrival': current['arrival_time'],
                 'burst': current['burst_time'],
                 'completion': completion_time,
-                'response': response_time,
                 'wait': waiting_time,
                 'turnaround': turnaround_time
             })
@@ -70,12 +68,10 @@ def sjf_schedule(processes):
 
     total_wait = sum(p['wait'] for p in completed_processes)
     total_turnaround = sum(p['turnaround'] for p in completed_processes)
-    total_response = sum(p['response'] for p in completed_processes)
     
     metrics = {
         'avg_waiting_time': round(total_wait / len(completed_processes), 2) if completed_processes else 0,
         'avg_turnaround_time': round(total_turnaround / len(completed_processes), 2) if completed_processes else 0,
-        'avg_response_time': round(total_response / len(completed_processes), 2) if completed_processes else 0,
         'details': completed_processes
     }
     

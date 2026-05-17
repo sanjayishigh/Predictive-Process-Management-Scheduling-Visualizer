@@ -20,7 +20,6 @@ def fcfs_schedule(processes):
         start_time = max(current_time, current['arrival_time'])
         burst = current['burst_time']
         end_time = start_time + burst
-        response_time = start_time - current['arrival_time']
         
         gantt.append({
             'pid': current['pid'],
@@ -43,7 +42,6 @@ def fcfs_schedule(processes):
             'arrival': current['arrival_time'],
             'burst': current['burst_time'],
             'completion': completion_time,
-            'response': response_time,
             'wait': waiting_time,
             'turnaround': turnaround_time
         })
@@ -52,12 +50,10 @@ def fcfs_schedule(processes):
         
     total_wait = sum(p['wait'] for p in completed_processes)
     total_turnaround = sum(p['turnaround'] for p in completed_processes)
-    total_response = sum(p['response'] for p in completed_processes)
     
     metrics = {
         'avg_waiting_time': round(total_wait / len(completed_processes), 2) if completed_processes else 0,
         'avg_turnaround_time': round(total_turnaround / len(completed_processes), 2) if completed_processes else 0,
-        'avg_response_time': round(total_response / len(completed_processes), 2) if completed_processes else 0,
         'details': completed_processes
     }
     

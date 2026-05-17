@@ -448,3 +448,46 @@ input::placeholder {
 .metrics-accent {
     background: linear-gradient(165deg, rgba(61, 158, 229, 0.06), var(--surface));
 }
+
+/* ── LSTM predicted burst badge ─────────────────────────────────────── */
+.lstm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    background: rgba(61, 158, 229, 0.12);
+    color: var(--accent);
+    border: 1px solid rgba(61, 158, 229, 0.30);
+    box-shadow: 0 0 6px rgba(61, 158, 229, 0.15);
+    white-space: nowrap;
+    transition: box-shadow 0.2s ease;
+}
+
+.lstm-badge:hover {
+    box-shadow: 0 0 12px rgba(61, 158, 229, 0.35);
+}
+
+/* ── Model indicator tags (page header) ─────────────────────────────── */
+.ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    background: rgba(61, 158, 229, 0.10);
+    color: var(--accent);
+    border: 1px solid rgba(61, 158, 229, 0.25);
+}
+
+.ai-badge--lstm {
+    background: rgba(168, 85, 247, 0.10);
+    color: #c084fc;
+    border-color: rgba(168, 85, 247, 0.25);
+}

@@ -1,0 +1,48 @@
+{
+  "model_file": "ppo_scheduler.zip",
+  "algorithm": "PPO",
+  "policy": "MlpPolicy",
+  "net_arch": [
+    128,
+    128
+  ],
+  "total_timesteps": 500000,
+  "state_dim": 56,
+  "action_space": 8,
+  "state_features": [
+    "predicted_burst",
+    "waiting_time",
+    "deadline_pressure",
+    "io_bound",
+    "priority",
+    "wait_ratio",
+    "is_valid"
+  ],
+  "reward_coefficients": {
+    "alpha_waiting": 1.0,
+    "beta_turnaround": 0.5,
+    "gamma_throughput": 2.0,
+    "delta_deadline": 5.0,
+    "epsilon_starve": 3.0
+  },
+  "benchmark_n_scenarios": 500,
+  "benchmark": {
+    "ppo_avg_wait_ms": 17.61,
+    "sjf_avg_wait_ms": 19.81,
+    "fcfs_avg_wait_ms": 33.69,
+    "ppo_vs_sjf_pct_improvement": 11.09,
+    "ppo_vs_fcfs_pct_improvement": 47.74,
+    "ppo_deadline_miss_pct": 21.7,
+    "sjf_deadline_miss_pct": 29.26
+  },
+  "novelties": [
+    "LSTM-predicted burst as RL state feature (no oracle knowledge)",
+    "PPO over DQN \u2014 supports variable-length time quanta",
+    "Multi-objective reward: waiting + turnaround + throughput + deadline + starvation"
+  ],
+  "depends_on": {
+    "lstm_weights": "burst_predictor.pt",
+    "lstm_meta": "burst_predictor_meta.json",
+    "dataset": "dataset.csv"
+  }
+}

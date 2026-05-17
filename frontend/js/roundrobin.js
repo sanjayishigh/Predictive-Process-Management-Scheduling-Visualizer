@@ -1,11 +1,11 @@
 // Initialize
 renderProcessTable('process-table-container');
 
-function handleAddProcess() {
+async function handleAddProcess() {
     const arrival = document.getElementById('arrival').value;
     const burst = document.getElementById('burst').value;
-    addProcess(null, parseInt(burst) || 0, parseInt(arrival) || 0);
-    renderProcessTable('process-table-container');
+    await addProcess(null, parseInt(burst) || 0, parseInt(arrival) || 0);
+    await renderProcessTable('process-table-container');
     
     // Clear inputs
     document.getElementById('arrival').value = '';
@@ -16,7 +16,7 @@ function handleAddProcess() {
 }
 
 async function runScheduler() {
-    const processes = getProcesses();
+    const processes = await getProcesses();
     const quantum = document.getElementById('quantum').value || 2;
     const btn = document.querySelector('.primary-btn');
     btn.innerHTML = 'Running…';

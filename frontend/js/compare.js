@@ -1,5 +1,5 @@
 async function runAll() {
-    const processes = getProcesses();
+    const processes = await getProcesses();
     const container = document.getElementById('compare-container');
 
     container.innerHTML = '<div class="compare-placeholder">Running simulations…</div>';

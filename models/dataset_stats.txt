@@ -1,0 +1,22 @@
+============================================================
+APEX-Sched Dataset Summary
+============================================================
+Total rows        : 16,599
+Positive labels   : 6,635  (40.0%)
+Unique scenarios  : 6,635
+
+Workload distribution:
+  cpu_heavy     6,485 rows  (39.1%)
+  mixed         5,706 rows  (34.4%)
+  io_heavy      4,408 rows  (26.6%)
+
+Feature stats (positive label rows only):
+  remaining_burst        mean=14.677  std=22.732  min=1.0  max=431.0
+  waiting_time           mean=20.255  std=35.150  min=0.0  max=539.0
+  urgency_score          mean=2.256  std=1.879  min=0.0  max=7.9
+  deadline_pressure      mean=0.256  std=0.354  min=0.0  max=1.0
+  queue_depth            mean=2.502  std=1.498  min=1.0  max=7.0
+
+I/O bound %  (all rows) :
+  32.0%
+============================================================

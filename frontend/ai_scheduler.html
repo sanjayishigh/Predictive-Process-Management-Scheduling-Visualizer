@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ML-assisted CPU scheduling visualization with Gantt chart and metrics.">
+    <meta name="description" content="PPO + LSTM AI-assisted CPU scheduling visualization with Gantt chart and metrics.">
     <title>AI Scheduler — Predictive-Scheduler</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/layout.css">
@@ -25,7 +25,14 @@
     <div class="app-container">
         <header class="page-intro">
             <h1>AI-assisted scheduler</h1>
-            <p>Priority prediction drives the order of execution. Add processes, then run to refresh the timeline and metrics.</p>
+            <p>
+                PPO reinforcement-learning agent + LSTM burst predictor drives scheduling decisions.
+                Add processes, then run to refresh the timeline and metrics.
+            </p>
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.5rem;">
+                <span class="ai-badge">🤖 PPO Agent</span>
+                <span class="ai-badge ai-badge--lstm">⚡ LSTM Burst Predictor</span>
+            </div>
         </header>
 
         <aside class="sidebar surface-card">
@@ -35,8 +42,22 @@
                 <input type="number" id="arrival" placeholder="0" min="0">
             </div>
             <div class="input-group">
-                <label for="burst">Burst time</label>
-                <input type="number" id="burst" placeholder="5" min="1">
+                <label for="burst">Burst time (ms)</label>
+                <input type="number" id="burst" placeholder="10" min="1">
+            </div>
+            <div class="input-group">
+                <label for="priority">Priority (1-5)</label>
+                <input type="number" id="priority" placeholder="3" min="1" max="5">
+            </div>
+            <div class="input-group">
+                <label for="deadline">Deadline</label>
+                <input type="number" id="deadline" placeholder="auto" min="1">
+            </div>
+            <div class="input-group">
+                <label for="io_bound" style="display:flex;align-items:center;gap:0.5rem;">
+                    <input type="checkbox" id="io_bound" style="width:auto;margin:0;">
+                    I/O-bound process
+                </label>
             </div>
             <button type="button" class="btn secondary-btn" style="width:100%" onclick="handleAddProcess()">Add process</button>
             <hr class="divider">
