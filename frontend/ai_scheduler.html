@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PPO + LSTM AI-assisted CPU scheduling visualization with Gantt chart and metrics.">
+    <meta name="description"
+        content="PPO + LSTM AI-assisted CPU scheduling visualization with Gantt chart and metrics.">
     <title>AI Scheduler — Predictive-Scheduler</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/components.css">
 </head>
+
 <body>
     <nav class="site-nav">
         <a href="/" class="brand">Predictive-Scheduler<span class="brand-sub"></span></a>
@@ -30,8 +33,8 @@
                 Add processes, then run to refresh the timeline and metrics.
             </p>
             <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.5rem;">
-                <span class="ai-badge">🤖 PPO Agent</span>
-                <span class="ai-badge ai-badge--lstm">⚡ LSTM Burst Predictor</span>
+                <span class="ai-badge">PPO Agent</span>
+                <span class="ai-badge ai-badge--lstm">LSTM Burst Predictor</span>
             </div>
         </header>
 
@@ -59,9 +62,11 @@
                     I/O-bound process
                 </label>
             </div>
-            <button type="button" class="btn secondary-btn" style="width:100%" onclick="handleAddProcess()">Add process</button>
+            <button type="button" class="btn secondary-btn" style="width:100%" onclick="handleAddProcess()">Add
+                process</button>
             <hr class="divider">
-            <button type="button" class="btn primary-btn" style="width:100%" onclick="runScheduler()">Run scheduler</button>
+            <button type="button" class="btn primary-btn" style="width:100%" onclick="runScheduler()">Run
+                scheduler</button>
         </aside>
 
         <main class="main-content">
@@ -84,4 +89,5 @@
     <script src="/js/ganttChart.js"></script>
     <script src="/js/ai_scheduler.js"></script>
 </body>
+
 </html>
