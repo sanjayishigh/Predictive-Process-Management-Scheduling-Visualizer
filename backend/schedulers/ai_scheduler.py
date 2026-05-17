@@ -9,39 +9,22 @@ import sys
 import json
 import random
 import numpy as np
-import torch
-import torch.nn as nn
 
 _MODELS_DIR = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "..", "models")
 )
 
-# ── LSTM (must match notebook architecture exactly) ──────────────────────────
-
-class BurstLSTM(nn.Module):
-    def __init__(self, input_size, hidden_size=64, num_layers=2, dropout=0.2):
-        super().__init__()
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers,
-                            batch_first=True,
-                            dropout=dropout if num_layers > 1 else 0.0)
-        self.head = nn.Sequential(
-            nn.Linear(hidden_size, 32), nn.ReLU(),
-            nn.Dropout(dropout), nn.Linear(32, 1),
-        )
-    def forward(self, x):
-        out, _ = self.lstm(x)
-        return self.head(out[:, -1, :])
-
+# ── LSTM (ONNX Version) ──────────────────────────
 
 def _load_lstm():
     with open(os.path.join(_MODELS_DIR, "burst_predictor_meta.json")) as f:
         meta = json.load(f)
-    m = BurstLSTM(len(meta["features"]), meta.get("hidden_size", 64),
-                  meta.get("num_layers", 2), meta.get("dropout", 0.2))
-    m.load_state_dict(torch.load(
-        os.path.join(_MODELS_DIR, "burst_predictor.pt"),
-        map_location="cpu", weights_only=True))
-    m.eval()
+    try:
+        import onnxruntime as ort
+        m = ort.InferenceSession(os.path.join(_MODELS_DIR, "burst_predictor.onnx"))
+    except Exception as e:
+        print(f"[ai_scheduler] ONNX load failed: {e}")
+        m = None
     return m, np.array(meta["scaler_mean"], dtype=np.float32), \
               np.array(meta["scaler_scale"], dtype=np.float32)
 
@@ -50,13 +33,16 @@ _lstm_model, _scaler_mean, _scaler_scale = _load_lstm()
 LSTM_FEATURES = ["waiting_time","io_bound","priority","slack_time",
                  "urgency_score","wait_ratio","deadline_pressure","queue_depth"]
 
-@torch.no_grad()
 def _predict_burst(lstm_input: dict) -> float:
     """Exact copy of notebook's predict_burst() — dict-based interface."""
     x = np.array([[lstm_input.get(f, 0.0) for f in LSTM_FEATURES]], dtype=np.float32)
     xs = (x - _scaler_mean) / (_scaler_scale + 1e-8)
-    xt = torch.tensor(xs, dtype=torch.float32).unsqueeze(1)
-    return float(max(np.expm1(_lstm_model(xt).item()), 1.0))
+    if _lstm_model is None:
+        return float(max(lstm_input.get("burst_time", 10.0), 1.0))
+    xt = np.expand_dims(xs, axis=1).astype(np.float32)
+    inputs = {_lstm_model.get_inputs()[0].name: xt}
+    out = _lstm_model.run(None, inputs)[0]
+    return float(max(np.expm1(out[0][0]), 1.0))
 
 
 # ── ProcessEnv (copy-pasted from notebook, zero changes) ────────────────────
@@ -130,8 +116,8 @@ class ProcessEnv:
 
 def _load_ppo():
     try:
-        from stable_baselines3 import PPO
-        return PPO.load(os.path.join(_MODELS_DIR, "ppo_scheduler"))
+        import onnxruntime as ort
+        return ort.InferenceSession(os.path.join(_MODELS_DIR, "ppo_policy.onnx"))
     except Exception as e:
         print(f"[ai_scheduler] PPO load failed: {e}")
         return None
@@ -181,8 +167,9 @@ def ai_schedule(processes: list) -> dict:
     while env.processes:
         # Record which process will be chosen BEFORE stepping
         if _ppo_model is not None:
-            action, _ = _ppo_model.predict(obs.reshape(1, -1), deterministic=True)
-            action = int(action[0])
+            inputs = {_ppo_model.get_inputs()[0].name: obs.reshape(1, -1).astype(np.float32)}
+            action_logits = _ppo_model.run(None, inputs)[0]
+            action = int(np.argmax(action_logits[0]))
         else:
             # SJF fallback
             action = min(range(len(env.processes)),
